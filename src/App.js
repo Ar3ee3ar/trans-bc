@@ -2,63 +2,38 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import { Layout, Button, theme, Form, Input } from 'antd';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-const onFinish = (values) => { console.log('Success:', values); };
-const onFinishFailed = (errorInfo) => { console.log('Failed:', errorInfo); };
+import api from './api';
+import Login from './page/login';
+import Login2 from './page/test'
+
 const { Header, Content, Footer } = Layout;
 
-const App = () => { const{ token: { colorBgContainer },} = theme.useToken();
+const App = () => { 
+  const{ token: { colorBgContainer },} = theme.useToken();
   return (
-    <Layout className="layout">
+      <BrowserRouter>
+          <Layout className="layout">
 
-      <Header>
-        <div className="logo" />
-        <div style={{ textAlign: 'center', color: 'white', font: '50px'}}> 
-          ijohtjeio 
-        </div>
-      </Header>
+          <Header>
+            <div className="logo" />
+            <div style={{ textAlign: 'center', color: 'white', font: '50px'}}> 
+              ijohtjeio 
+            </div>
+          </Header>
 
-      <Content style={{ padding: '50px 50px' }}>
-        <div className="site-layout-content" style={{ textAlign: 'center', background: colorBgContainer }}>
-          Content
-          <Form
-            name="basic"
-            labelCol={{ span: 8, }}
-            wrapperCol={{ span: 16, }}
-            style={{ maxWidth: 600, }}
-            initialValues={{ remember: true, }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off">
-
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[{ required: true, message: 'Please input your username!', }, ]}>
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: 'Please input your password!', }, ]}>
-              <Input.Password />
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{ offset: 8, span: 16, }}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-
-          </Form>
-        </div>
-      </Content>
-      
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
-      
-    </Layout>
+          <Content style={{ padding: '50px 50px' }}>
+            <Routes>
+              <Route exact path='/' element={<Login/>}/>
+              <Route exact path='/test' element = {<Login2/>}/>
+            </Routes>
+          </Content>
+          
+          <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+          
+        </Layout>
+      </BrowserRouter>
   );
 };
 
