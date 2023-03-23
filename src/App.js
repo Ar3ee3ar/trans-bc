@@ -3,10 +3,14 @@ import './App.css';
 import React from 'react';
 import { Layout, Button, theme, Form, Input } from 'antd';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {Buffer} from 'buffer';
 
 import api from './api';
 import Login from './page/login';
-import Login2 from './page/test'
+import Test from './page/home';
+
+window.Buffer = window.Buffer || require("buffer").Buffer;
+
 
 const { Header, Content, Footer } = Layout;
 
@@ -26,7 +30,7 @@ const App = () => {
           <Content style={{ padding: '50px 50px' }}>
             <Routes>
               <Route exact path='/' element={<Login/>}/>
-              <Route exact path='/test' element = {<Login2/>}/>
+              <Route exact path='/test' element = {<Test/>}/>
             </Routes>
           </Content>
           
