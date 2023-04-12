@@ -1,20 +1,19 @@
-// require('dotenv').config();
 // const alchemyKey = process.env.REACT_APP_ALCHEMY_KEY;
-const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
-const web3 = createAlchemyWeb3("wss://eth-goerli.g.alchemy.com/v2/lw6smreDcTkJcZmWMkyyONIvEn58LFYe"); 
+// const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
+import Web3 from "web3";
+// const web3 = createAlchemyWeb3("wss://eth-goerli.g.alchemy.com/v2/lw6smreDcTkJcZmWMkyyONIvEn58LFYe"); 
+// require('dotenv').config();
 
 const contractABI = require("../abi/contract-abi.json");
-const contractAddress = "0x12d7ab4263A4eA510535571D23CDD94141632f4d";
+const contractAddress = process.env.REACT_APP_CONTRACT;
 
-export const helloworldContract = new web3.eth.Contract(
+window.web3 =  new Web3(window.ethereum);
+// window.contract = await new window.web3.eth.Contract(contractABI, contractAddress);
+
+export const CertTranContract = new window.web3.eth.Contract(
     contractABI,
     contractAddress
 );
-
-export const loadCurrentMessage = async () => {
-    const message = await helloworldContract.methods.message().call();
-    return message;
-};
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -94,8 +93,7 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-export const updateMessage = async (address, message) => {
-
+export const getCountCert = async(address) =>{
   //input error handling
   if (!window.ethereum || address === null) {
     return {
@@ -103,21 +101,27 @@ export const updateMessage = async (address, message) => {
         "💡 Connect your Metamask wallet to update the message on the blockchain.",
     };
   }
+  const data = await CertTranContract.methods.count_students().call();
+  console.log(data);
+  return data;
 
-  if (message.trim() === "") {
+}
+
+export const addTrans = async (address,std_id,hashData,hashPaper) =>{
+    //input error handling
+  if (!window.ethereum || address === null) {
     return {
-      status: "❌ Your message cannot be an empty string.",
+      status:
+        "💡 Connect your Metamask wallet to update the message on the blockchain.",
     };
   }
-
-  //set up transaction parameters
   const transactionParameters = {
     to: contractAddress, // Required except during contract publications.
     from: address, // must match user's active address.
-    data: helloworldContract.methods.update(message).encodeABI(),
+    data: CertTranContract.methods.storeData(parseInt(std_id),std_id,window.web3.utils.sha3(hashData),window.web3.utils.sha3(hashPaper),true).encodeABI(),
   };
 
-  //sign the transaction
+    //sign the transaction
   try {
     const txHash = await window.ethereum.request({
       method: "eth_sendTransaction",
@@ -127,7 +131,7 @@ export const updateMessage = async (address, message) => {
       status: (
         <span>
           ✅{" "}
-          <a target="_blank" href={`https://goerli.etherscan.io/tx/${txHash}`}>
+          <a target="_blank" href={`https://sepolia.etherscan.io/tx/${txHash}`}>
             View the status of your transaction on Etherscan!
           </a>
           <br />
@@ -142,6 +146,102 @@ export const updateMessage = async (address, message) => {
     };
   }
 };
+
+export const ViewData_Transaction = async (txHash) => {
+  try{
+    const receipt = await window.web3.eth.getTransactionReceipt(txHash);
+    const form_data = window.web3.eth.abi.decodeParameters([
+          {
+            name: "id",
+            type: "uint256"
+          },
+          {
+            name: "StdID",
+            type: "string"
+          },
+          {
+            name: "HashData",
+            type: "bytes32"
+          },
+          {
+            name: "HashPaper",
+            type: "bytes32"
+          },
+          {
+            name: "status",
+            type: "bool"
+          },
+          {
+            name: "time",
+            type: "uint256"
+          }
+        ],
+        receipt.logs[0].data)
+    return form_data
+  }
+  catch (error){
+    console.log(error)
+  }
+}
+
+export const ViewData_bc = async (id) => {
+  try{
+    const data = await CertTranContract.methods.getData(id).call();
+    return data
+  }
+  catch(error){
+    console.log(error)
+  }
+}
+
+// export const updateMessage = async (address, message) => {
+
+//   //input error handling
+//   if (!window.ethereum || address === null) {
+//     return {
+//       status:
+//         "💡 Connect your Metamask wallet to update the message on the blockchain.",
+//     };
+//   }
+
+//   if (message.trim() === "") {
+//     return {
+//       status: "❌ Your message cannot be an empty string.",
+//     };
+//   }
+
+//   //set up transaction parameters
+//   const transactionParameters = {
+//     to: contractAddress, // Required except during contract publications.
+//     from: address, // must match user's active address.
+//     data: CertTranContract.methods.update(message).encodeABI(),
+//   };
+
+//   //sign the transaction
+//   try {
+//     const txHash = await window.ethereum.request({
+//       method: "eth_sendTransaction",
+//       params: [transactionParameters],
+//     });
+//     return {
+//       status: (
+//         <span>
+//           ✅{" "}
+//           <a target="_blank" href={`https://sepolia.etherscan.io/tx/${txHash}`}>
+//             View the status of your transaction on Etherscan!
+//           </a>
+//           <br />
+//           ℹ️ Once the transaction is verified by the network, the message will
+//           be updated automatically.
+//         </span>
+//       ),
+//     };
+//   } catch (error) {
+//     return {
+//       status: "😥 " + error.message,
+//     };
+//   }
+// };
 
 
 
