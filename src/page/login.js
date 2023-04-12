@@ -1,5 +1,6 @@
 import React, { Component,useState }  from 'react';
 import { Layout, Button, theme, Form, Input } from 'antd';
+import {useNavigate} from 'react-router-dom';
 
 import api from '../api';
 
@@ -19,12 +20,15 @@ export default function Login (){
     const [password, setPassword] = useState();
 
     const{ token: { colorBgContainer },} = theme.useToken();
+
+    const navigate = useNavigate();
     
     const handleSubmit = async e =>{
         const response = await loginUser(username);
-        if(response.data.data[0].pass == password){
+        if(response.data.data[0].pass === password){
             console.log('pass');
-            window.location.href = "/test";
+            console.log(username);
+            navigate('/request',{state: {id:username}})
         }
         else{
             console.log('wrong password');
