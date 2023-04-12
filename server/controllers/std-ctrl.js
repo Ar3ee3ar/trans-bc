@@ -92,7 +92,7 @@ const getHistoryByID = async (req, res) => {
                 $lookup: {
                 from: "all_subj_info",
                 localField: "course.subj_ID",
-                foreignField: "subj_ID",
+                foreignField: "_id",
                 as: 'subj_info'
                 }
             },
@@ -124,7 +124,7 @@ const getHistory = async (req, res) => {
                 $lookup: {
                 from: "all_subj_info",
                 localField: "course.subj_ID",
-                foreignField: "subj_ID",
+                foreignField: "_id",
                 as: 'subj_info'
                 }
             }
