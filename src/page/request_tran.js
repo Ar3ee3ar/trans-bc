@@ -82,8 +82,8 @@ const RequestTran = () =>{
       SetDate_grad(response.data.data[0].date_of_grad);
       SetAll(JSON.stringify(response.data.data[0]));
       const blob_pdf = await gen_pdf(response);
-      SetFile64(blob_pdf)
-      SetFile(JSON.stringify(blob_pdf));
+      SetFile64(blob_pdf) //stored in database
+      SetFile(JSON.stringify(blob_pdf)); //stored in blockchain
     }
     fetchData();
 
