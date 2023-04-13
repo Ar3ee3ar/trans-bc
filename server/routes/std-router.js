@@ -1,5 +1,5 @@
 const express = require('express')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 
 const stdCtrl = require('../controllers/std-ctrl')
 
