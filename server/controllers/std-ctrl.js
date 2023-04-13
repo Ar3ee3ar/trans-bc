@@ -170,7 +170,7 @@ const getSubj = async (req, res) => {
 // controller for => Account
 const createAccount = (req, res) => {
     const body = req.body
-    console.log(body)
+    // console.log(body)
 
     if (!body) {
         return res.status(400).json({
@@ -207,7 +207,7 @@ const createAccount = (req, res) => {
 const updateAccount = async (req, res) => {
     // console.log(typeof(req))
     const body = req.body
-    console.log(body.json)
+    // console.log(body.json)
 
     if (!body) {
         return res.status(400).json({
@@ -216,7 +216,7 @@ const updateAccount = async (req, res) => {
         })
     }
     try{
-        console.log(body)
+        // console.log(body)
         const account_file = await account.findOneAndUpdate({ _id: req.params.std_id}, body, {
             new: true
         });
