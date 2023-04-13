@@ -23,6 +23,11 @@ export default function ViewTran(){
         console.log(response)
     }
 
+    const onGetDataDB = async(_id) =>{
+        const response = await api.getHistoryByID(_id);
+        return response.data.data[0]
+    }
+
     return(
         <div className="site-layout-content" 
             style={{ textAlign: 'center' ,background:colorBgContainer}} >

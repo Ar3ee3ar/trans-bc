@@ -12,7 +12,8 @@ const onFinishFailed = (errorInfo) => {
 };
 
 async function loginUser (username){
-    return api.getHistoryByID(username);
+    // console.log(await api.getAccountByID(username));
+    return api.getAccountByID(username);
 }
 
 export default function Login (){
@@ -25,7 +26,7 @@ export default function Login (){
     
     const handleSubmit = async e =>{
         const response = await loginUser(username);
-        if(response.data.data[0].pass === password){
+        if(response.data.data.pass === password){
             console.log('pass');
             console.log(username);
             navigate('/request',{state: {id:username}})

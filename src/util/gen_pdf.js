@@ -54,6 +54,6 @@ export const gen_pdf = async (response) =>{
     }
 
     // doc.save("a4.pdf");
-    console.log(doc.output('blob'));
-    return doc.output('blob');
+    // console.log(doc.output('datauristring'));
+    return doc.output('datauristring');
 }

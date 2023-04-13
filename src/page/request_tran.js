@@ -25,6 +25,11 @@ window.Buffer = window.Buffer || require("buffer").Buffer;
 //     return api.getHistoryByID(username);
 // }
 
+// async function UpdateBcOffChain (username,txhash,pdf){
+//     const body = {"_id":username, "txhash":txhash, "file_pdf":pdf};
+//     return api.updateHistory(username,body)
+// }
+
 const connect_wall = () =>{
     console.log('connect')
 }
@@ -52,6 +57,8 @@ const RequestTran = () =>{
 
     const [all_data,SetAll] = useState("");
     const [file_pdf,SetFile] = useState("");
+
+    const [file_base64,SetFile64] = useState("");
     // const [course]
 
 
@@ -67,13 +74,15 @@ const RequestTran = () =>{
     // addSmartContractListener();
     async function fetchData(){
       const response = await api.getHistoryByID(id_state.state.id);
+      // console.log(response.data.data[0]);
       setID(response.data.data[0]._id);
       SetStd_name(response.data.data[0].std_name);
       SetStd_last(response.data.data[0].std_last);
       SetDate_ad(response.data.data[0].date_of_ad);
       SetDate_grad(response.data.data[0].date_of_grad);
       SetAll(JSON.stringify(response.data.data[0]));
-      const blob_pdf = gen_pdf(response);
+      const blob_pdf = await gen_pdf(response);
+      SetFile64(blob_pdf)
       SetFile(JSON.stringify(blob_pdf));
     }
     fetchData();
@@ -131,8 +140,9 @@ const RequestTran = () =>{
 }
 
 const onStoreData = async () => {
-  const status = await addTrans(walletAddress,_id,all_data,file_pdf);
-  setStatus(status);
+  const status = await addTrans(walletAddress,_id,all_data,file_pdf,file_base64);
+  // console.log(status.status)
+  setStatus(status.status);
 }
 
 // const onUpdatePressed = async () => {
@@ -146,7 +156,7 @@ const CountData = async(walletAddress) =>{
 
 const navigate = useNavigate();
 const change_page_gen = async e =>{
-  console.log(id_state.state.id);
+  // console.log(id_state.state.id);
   navigate('/view',{state: id_state.state});
 }
 
@@ -178,8 +188,9 @@ const change_page_gen = async e =>{
                     <p>{std_last}</p>
                     <p>{date_ad}</p>
                     <p>{date_grad}</p>
-                    <p>{all_data}</p>
-                    {/* <p>{file_pdf}</p> */}
+                    {/* <p>{all_data}</p> */}
+                    {/* <a download="PDF Title" href={file_base64}>Download PDF document</a> */}
+                    <p id="status">{status}</p>
 
                 <Form.Item
                     wrapperCol={{ offset: 8, span: 16, }}

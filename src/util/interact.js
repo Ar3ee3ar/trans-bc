@@ -4,11 +4,23 @@ import Web3 from "web3";
 // const web3 = createAlchemyWeb3("wss://eth-goerli.g.alchemy.com/v2/lw6smreDcTkJcZmWMkyyONIvEn58LFYe"); 
 // require('dotenv').config();
 
+import api from '../api';
+
 const contractABI = require("../abi/contract-abi.json");
 const contractAddress = process.env.REACT_APP_CONTRACT;
 
 window.web3 =  new Web3(window.ethereum);
 // window.contract = await new window.web3.eth.Contract(contractABI, contractAddress);
+
+async function UpdateBcOffChain (username,txhash,pdf){
+    const body = {"_id":username, "txhash":txhash, "file_pdf":pdf};
+    return api.updateProof(username,body)
+}
+
+async function CreateBcOffChain (username,txhash,pdf){
+    const body = {"_id":username, "txhash":txhash, "file_pdf":pdf};
+    return api.createProof(body)
+}
 
 export const CertTranContract = new window.web3.eth.Contract(
     contractABI,
@@ -102,12 +114,12 @@ export const getCountCert = async(address) =>{
     };
   }
   const data = await CertTranContract.methods.count_students().call();
-  console.log(data);
+  // console.log(data);
   return data;
 
 }
 
-export const addTrans = async (address,std_id,hashData,hashPaper) =>{
+export const addTrans = async (address,std_id,hashData,hashPaper,file_base64) =>{
     //input error handling
   if (!window.ethereum || address === null) {
     return {
@@ -127,6 +139,17 @@ export const addTrans = async (address,std_id,hashData,hashPaper) =>{
       method: "eth_sendTransaction",
       params: [transactionParameters],
     });
+    // const txHash = "0x42df1b3a119dd103b9062cdf6e02b9657cf2efab4a56ce6b263d6bc69aa1bf97"
+    try{
+      var response = await CreateBcOffChain(std_id,txHash,file_base64)
+    }catch(error){
+      // console.log(error.response.data.message);
+      if(error.response.status === 400 & error.response.data.message==="Proof not created!"){
+        response = await UpdateBcOffChain(std_id,txHash,file_base64);
+      }
+    }
+
+    // console.log(response);
     return {
       status: (
         <span>
