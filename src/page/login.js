@@ -40,7 +40,7 @@ export default function Login (){
      return(
             <div className="site-layout-content" 
             style={{ textAlign: 'center' ,background:colorBgContainer}} >
-          Content
+          Please login
           <Form
             name="basic"
             labelCol={{ span: 8, }}
