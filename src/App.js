@@ -7,7 +7,8 @@ import {Buffer} from 'buffer';
 
 import api from './api';
 import Login from './page/login';
-import Test from './page/home';
+import RequestTran from './page/request_tran';
+import ViewTran from './page/view_tran';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -23,14 +24,15 @@ const App = () => {
           <Header>
             <div className="logo" />
             <div style={{ textAlign: 'center', color: 'white', font: '50px'}}> 
-              Send a certificate to you
+              ijohtjeio 
             </div>
           </Header>
 
           <Content style={{ padding: '50px 50px' }}>
             <Routes>
               <Route exact path='/' element={<Login/>}/>
-              <Route exact path='/test' element = {<Test/>}/>
+              <Route exact path='/request' element = {<RequestTran/>}/>
+              <Route exact path='/view' element={<ViewTran/>}/>
             </Routes>
           </Content>
           
