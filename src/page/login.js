@@ -1,6 +1,7 @@
 import React, { Component,useState }  from 'react';
-import { Layout, Button, theme, Form, Input } from 'antd';
+import { Layout, Button, theme, Form, Input, Space } from 'antd';
 import {useNavigate} from 'react-router-dom';
+
 
 import api from '../api';
 
@@ -71,9 +72,14 @@ export default function Login (){
 
             <Form.Item
               wrapperCol={{ offset: 8, span: 16, }}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
+              <Space wrap>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+                <Button type="primary" htmlType='submit' onClick={() => navigate("/view")}>
+                  Verify the certificate
+                </Button>
+              </Space>
             </Form.Item>
 
           </Form>
