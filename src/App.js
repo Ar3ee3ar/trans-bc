@@ -24,7 +24,7 @@ const App = () => {
           <Header>
             <div className="logo" />
             <div style={{ textAlign: 'center', color: 'white', font: '50px'}}> 
-              ijohtjeio 
+              Certificate 
             </div>
           </Header>
 
@@ -36,7 +36,7 @@ const App = () => {
             </Routes>
           </Content>
           
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+          <Footer style={{ textAlign: 'center' }}>MCS KMUTNB</Footer>
           
         </Layout>
       </BrowserRouter>
