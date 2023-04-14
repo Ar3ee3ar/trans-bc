@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
-import { Layout, Button, theme, Form, Input } from 'antd';
+import { Layout, Button, theme,Space} from 'antd';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {Buffer} from 'buffer';
 
@@ -15,16 +14,20 @@ window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const { Header, Content, Footer } = Layout;
 
+
 const App = () => { 
   const{ token: { colorBgContainer },} = theme.useToken();
+  
   return (
       <BrowserRouter>
           <Layout className="layout">
 
           <Header>
-            <div className="logo" />
-            <div style={{ textAlign: 'center', color: 'white', font: '50px'}}> 
+            <div style={{ textAlign: 'end', color: 'white', font: '50px'}}> 
+            <Space size ={555}>
               Certificate 
+              <Button type="primary" htmlType='submit' href='/view' >Verify Certificate</Button>
+            </Space>
             </div>
           </Header>
 
