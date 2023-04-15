@@ -9,7 +9,13 @@ import {
 
 }from '../util/interact.js';
 
-export default function ViewTran(){
+export const NavLogin = () =>{
+    return(
+        <Button type="primary" htmlType='submit' href='/' >Login</Button>
+    )
+}
+
+export function ViewTran(){
     const [txhash, setTxhash] = useState("");
     const [detailDB, setDetail ] = useState("");
     const{ token: { colorBgContainer },} = theme.useToken();

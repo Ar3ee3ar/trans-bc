@@ -1,7 +1,6 @@
 import React, { Component,useState }  from 'react';
-import { Layout, Button, theme, Form, Input, Space } from 'antd';
+import { Layout, Button, theme, Form, Input } from 'antd';
 import {useNavigate} from 'react-router-dom';
-
 
 import api from '../api';
 
@@ -17,13 +16,7 @@ async function loginUser (username){
     return api.getAccountByID(username);
 }
 
-export const NavView = () =>{
-    return(
-        <Button type="primary" htmlType='submit' href='/view' >Verify Certificate</Button>
-    )
-}
-
-export const Login = () =>{
+export default function Login (){
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
 
@@ -46,7 +39,7 @@ export const Login = () =>{
      return(
             <div className="site-layout-content" 
             style={{ textAlign: 'center' ,background:colorBgContainer}} >
-          Please login
+          Content
           <Form
             name="basic"
             labelCol={{ span: 8, }}
@@ -78,14 +71,9 @@ export const Login = () =>{
 
             <Form.Item
               wrapperCol={{ offset: 8, span: 16, }}>
-              <Space wrap>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-                <Button type="primary" htmlType='submit' onClick={() => navigate("/view")}>
-                  Verify the certificate
-                </Button>
-              </Space>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
             </Form.Item>
 
           </Form>

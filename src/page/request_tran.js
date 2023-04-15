@@ -42,7 +42,13 @@ const hexToByte = (hex) => {
   return hash_bytes;
 }
 
-const RequestTran = () =>{
+export const NavLogout = () =>{
+    return(
+        <Button type="primary" htmlType='submit' href='/' >Logout</Button>
+    )
+}
+
+export const RequestTran = () =>{
     const id_state = useLocation();
     const [walletAddress, setWallet] = useState("");
     const [status, setStatus] = useState("");
@@ -205,5 +211,3 @@ const change_page_gen = async e =>{
         </div>
         )
 }
-
-export default RequestTran;

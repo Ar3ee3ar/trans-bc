@@ -39,7 +39,8 @@ const proofTranSchema = new Schema(
 const accountSchema = new Schema(
     {
         _id: {type:String, required:true},
-        pass: {type:String, required:true}
+        pass: {type:String, required:true},
+        role: {type:String,required:true}
     }, { collection : 'account' }
 );
 

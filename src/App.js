@@ -5,9 +5,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {Buffer} from 'buffer';
 
 import api from './api';
-import Login from './page/login';
-import RequestTran from './page/request_tran';
-import ViewTran from './page/view_tran';
+import {Login,NavView} from './page/login';
+import {RequestTran,NavLogout} from './page/request_tran';
+import {ViewTran,NavLogin} from './page/view_tran';
+// import NavLogin from './page/navbar_login';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -26,7 +27,11 @@ const App = () => {
             <div style={{ textAlign: 'end', color: 'white', font: '50px'}}> 
             <Space size ={555}>
               Certificate 
-              <Button type="primary" htmlType='submit' href='/view' >Verify Certificate</Button>
+              <Routes>
+                <Route exact path='/' element={<NavView/>}/>
+                <Route exact path='/request' element = {<NavLogout/>}/>
+                <Route exact path='/view' element={<NavLogin/>}/>
+              </Routes>
             </Space>
             </div>
           </Header>
