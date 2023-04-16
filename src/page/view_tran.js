@@ -1,6 +1,6 @@
 import React, { Component,useState }  from 'react';
-import { Layout, Button, theme, Form, Input } from 'antd';
-import {useNavigate} from 'react-router-dom';
+import { Layout, Button, theme, Form, Input,Menu } from 'antd';
+import {useNavigate,Link} from 'react-router-dom';
 
 import api from '../api';
 import {
@@ -11,7 +11,13 @@ import {
 
 export const NavLogin = () =>{
     return(
-        <Button type="primary" htmlType='submit' href='/' >Login</Button>
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        style={{color: 'white'}}>
+        <Menu.Item>
+          <Link to="/">Login</Link></Menu.Item>
+      </Menu>
     )
 }
 
