@@ -1,8 +1,8 @@
-import React, { Component,useState }  from 'react';
-import { Layout, Button, theme, Form, Input, Space } from 'antd';
-import {useNavigate} from 'react-router-dom';
+import React, { Component,useState,useEffect }  from 'react';
+import { Layout, Button, theme, Form, Input, Space,Menu } from 'antd';
+import {useNavigate,Link,useLocation} from 'react-router-dom';
 
-
+import '../App.css'
 import api from '../api';
 
 const onFinish = (values) => {
@@ -19,17 +19,28 @@ async function loginUser (username){
 
 export const NavView = () =>{
     return(
-        <Button type="primary" htmlType='submit' href='/view' >Verify Certificate</Button>
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        style={{color: 'white'}}>
+        <Menu.Item>
+          <Link to="/view">Verification</Link></Menu.Item>
+      </Menu>
     )
 }
 
 export const Login = () =>{
+    const id_state = useLocation();
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
 
     const{ token: { colorBgContainer },} = theme.useToken();
 
     const navigate = useNavigate();
+
+    // useEffect = (()=>{
+    //   console.log(id_state)
+    // })
     
     const handleSubmit = async e =>{
         const response = await loginUser(username);
@@ -44,14 +55,17 @@ export const Login = () =>{
     }
 
      return(
-            <div className="site-layout-content" 
-            style={{ textAlign: 'center' ,background:colorBgContainer}} >
-          Please login
+            <div  className='center'
+              style={{ 
+                width: '100vh',
+                height:'30vh',
+                textAlign: 'center' ,
+                padding: '50px',
+                background:colorBgContainer,
+                borderRadius:'25px'}} >
           <Form
             name="basic"
-            labelCol={{ span: 8, }}
-            wrapperCol={{ span: 16, }}
-            style={{ maxWidth: 600, }}
+            style={{ width: '50vh', }}
             initialValues={{ remember: true, }}
             onFinish={handleSubmit}
             onFinishFailed={onFinishFailed}
@@ -76,14 +90,10 @@ export const Login = () =>{
               <Input.Password />
             </Form.Item>
 
-            <Form.Item
-              wrapperCol={{ offset: 8, span: 16, }}>
+            <Form.Item>
               <Space wrap>
                 <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-                <Button type="primary" htmlType='submit' onClick={() => navigate("/view")}>
-                  Verify the certificate
+                  login
                 </Button>
               </Space>
             </Form.Item>
