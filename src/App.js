@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
-import { Layout, Button, theme,Space} from 'antd';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Layout, Button, theme,Space,Col,Row,Menu} from 'antd';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import {Buffer} from 'buffer';
 
 import api from './api';
@@ -18,25 +18,44 @@ const { Header, Content, Footer } = Layout;
 
 const App = () => { 
   const{ token: { colorBgContainer },} = theme.useToken();
+
+  console.log([{key: 1, label: 'nav 1'},{key: 2, label: 'nav 1'},{key: 3, label: 'nav 1'}])
+
+  console.log((new Array(15).fill(null).map((_, index) => {
+            const key = index + 1;
+            return {
+              key,
+              label: `nav ${key}`,
+            };
+          })));
   
   return (
       <BrowserRouter>
           <Layout className="layout">
 
           <Header>
-            <div style={{ textAlign: 'end', color: 'white', font: '50px'}}> 
-            <Space size ={555}>
-              Certificate 
-              <Routes>
-                <Route exact path='/' element={<NavView/>}/>
-                <Route exact path='/request' element = {<NavLogout/>}/>
-                <Route exact path='/view' element={<NavLogin/>}/>
-              </Routes>
-            </Space>
+            <div style={{
+            float: 'left',
+            color: 'white',
+            font: '50px'
+          }}>
+            {/* <Row> */}
+             <h2 style={{margin: '0'}}>Certificate</h2>
+
+            </div>
+            <div style={{
+              width: '20vh',
+              float: 'right'
+            }}>
+                   <Routes>
+                     <Route exact path='/' element={<NavView/>}/>
+                     <Route exact path='/request' element = {<NavLogout/>}/>
+                     <Route exact path='/view' element={<NavLogin/>}/>
+                   </Routes>
             </div>
           </Header>
 
-          <Content style={{ padding: '50px 50px' }}>
+          <Content className="center block">
             <Routes>
               <Route exact path='/' element={<Login/>}/>
               <Route exact path='/request' element = {<RequestTran/>}/>
@@ -44,7 +63,11 @@ const App = () => {
             </Routes>
           </Content>
           
-          <Footer style={{ textAlign: 'center' }}>MCS KMUTNB</Footer>
+          <Footer style={{ 
+                  textAlign: 'center',
+                  display:'flex',
+                  alignItems: 'flex-end',
+                  justifyContent: 'center' }}>MCS KMUTNB</Footer>
           
         </Layout>
       </BrowserRouter>
