@@ -158,8 +158,6 @@ export const addTrans = async (address,std_id,hashData,hashPaper,file_base64) =>
             View the status of your transaction on Etherscan!
           </a>
           <br />
-          ℹ️ Once the transaction is verified by the network, the message will
-          be updated automatically.
         </span>
       ),
     };
