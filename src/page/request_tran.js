@@ -201,8 +201,8 @@ const onChangeDisabled = () =>{
 
 
     return(
-            <div className="site-layout-content" style={{ textAlign: 'center',width: '150vh',
-                height:'70vh',
+            <div className="site-layout-content" style={{ textAlign: 'center',width: '100vh',
+                height:'63vh',
                 padding: '20px 30px 20px 20px',
                 background:'white',
                 borderRadius:'25px' }}>
@@ -213,7 +213,14 @@ const onChangeDisabled = () =>{
                       </Col>
                       <Col flex={1}>
                         <Button type="primary" htmlType="submit" onClick={connectWalletPressed}>
-                          connect to wallet
+                          {walletAddress.length > 0 ? (
+                          "Connected: " +
+                          String(walletAddress).substring(0, 6) +
+                          "..." +
+                          String(walletAddress).substring(38)
+                        ) : (
+                          <span>Connect Wallet</span>
+                        )}
                         </Button>
                       </Col>
                     </Row>
@@ -298,13 +305,25 @@ const onChangeDisabled = () =>{
                     <p id="status">{status}</p>
           </Form>
         {/* <Button type="primary" htmlType='submit' onClick={change_page_gen}>to view transaction</Button> */}
-        <div hidden = {!componentDisabled}>
-          <Button type="primary" htmlType='submit' onClick={onChangeDisabled} >Edit</Button>
-          <Button type="primary" htmlType="submit" onClick={onStoreData}>Submit</Button>
+        <div  style={{paddingLeft:'40vh'}} hidden = {!componentDisabled}>
+          <Row>
+            <Col span={6}>
+              <Button  htmlType='submit' onClick={onChangeDisabled} >Edit</Button>
+            </Col>
+            <Col span={6}>
+              <Button type="primary" htmlType="submit" onClick={onStoreData}>Submit</Button>
+            </Col>
+          </Row>
         </div>
-        <div hidden = {componentDisabled}>
-          <Button type="primary" htmlType='submit'  onClick={UpdateData}>save</Button>
-          <Button type="primary" htmlType='submit'  onClick={onChangeDisabled}>cancel</Button>
+        <div  style={{paddingLeft:'40vh'}} hidden = {componentDisabled}>
+          <Row>
+            <Col span={6}>
+              <Button type="primary"  htmlType='submit'  onClick={UpdateData}>save</Button>
+            </Col>
+            <Col span={6}>
+              <Button type="primary" danger htmlType='submit'  onClick={onChangeDisabled}>cancel</Button>
+            </Col>
+          </Row>
           </div>
         </div>
         )

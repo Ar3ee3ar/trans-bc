@@ -1,5 +1,5 @@
 import React, { Component,useState }  from 'react';
-import { Layout, Button, theme, Form, Input,Menu } from 'antd';
+import { Layout, Button, theme, Form, Input,Menu,Table,Tag } from 'antd';
 import {useNavigate,Link} from 'react-router-dom';
 
 import api from '../api';
@@ -24,6 +24,8 @@ export const NavLogin = () =>{
 export function ViewTran(){
     const [txhash, setTxhash] = useState("");
     const [detailDB, setDetail ] = useState("");
+    const [detailDBTable, setDetailDBTable] = useState("");
+    const [detailProofTable, setDetailProofTable] = useState("");
     const{ token: { colorBgContainer },} = theme.useToken();
 
     const OnViewTransaction = async() =>{
@@ -47,6 +49,65 @@ export function ViewTran(){
         return response.data.data[0]
     }
 
+    const columns = [
+        {
+            title: 'Student ID',
+            dataIndex: 'std_id',
+            key: 'std_id',
+        },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Admission date',
+            dataIndex: 'date_ad',
+            key: 'date_ad',
+        },
+        {
+            title: 'Graduation date',
+            dataIndex: 'date_grad',
+            key: 'date_grad',
+        },
+        {
+            title: 'PDF',
+            dataIndex: 'file_pdf',
+            key: 'file_pdf',
+            render: (text) => <a download='transcript' href={text}>
+                         Download PDF
+                     </a>
+        },
+        {
+            title: 'Issue date',
+            dataIndex: 'date_issue',
+            key: 'date_issue',
+        },
+        {
+            title: 'Valid',
+            dataIndex: 'status',
+            key: 'status',
+            render: (_, { status }) => (
+            <>
+                {status.map((tag) => {
+                    let color = tag.length > 5 ? 'geekblue' : 'green';
+                    if (tag === 'false') {
+                        color = 'volcano';
+                    }
+                    else if (tag === 'true') {
+                        color = 'green';
+                    }
+                    return (
+                        <Tag color={color} key={tag}>
+                            {tag.toUpperCase()}
+                        </Tag>
+                    );
+                })}
+            </>
+            ),
+                },
+    ];
+
     const checkData = async() =>{
         try{
             var data_bc =  await OnViewTransaction();
@@ -57,6 +118,9 @@ export function ViewTran(){
             const data_db = await onGetHistoryDB(data_bc.StdID);
             console.log(data_db)
 
+            setDetailDBTable(data_db);
+            setDetailProofTable(proof_db)
+
             const pdf_db = JSON.stringify(proof_db.file_pdf);
             const hash_pdf_db = window.web3.utils.sha3(pdf_db);
 
@@ -64,17 +128,34 @@ export function ViewTran(){
             const hash_all_data = window.web3.utils.sha3(all_data);
 
             if(data_bc.HashPaper === hash_pdf_db & data_bc.HashData === hash_all_data){
-                setDetail(<span>
-                    ✅{" "}
-                    found data
-                    <br/>
-                    <a download={`${data_bc.StdID}_transcript`} href={proof_db.file_pdf}>
-                        Download PDF
-                    </a>
-                    <br />
-                    {all_data}
-                    </span>
-                );
+                // setDetail(<span>
+                //     ✅{" "}
+                //     found data
+                //     <br/>
+                //     <a download={`${data_bc.StdID}_transcript`} href={proof_db.file_pdf}>
+                //         Download PDF
+                //     </a>
+                //     <br />
+                //     {all_data}
+                //     </span>
+                var format_date_ad = new Date(data_db.date_of_ad);
+                var format_date_grad = new Date(data_db.date_of_grad);
+                var format_date_issue = new Date(data_bc.time * 1000)
+
+                const data = [
+                    {
+                        key: '1',
+                        std_id: data_db._id,
+                        name: String(data_db.std_name)+" "+String(data_db.std_last),
+                        date_ad: String(format_date_ad.getDate())+"/"+String(format_date_ad.getMonth()+1)+"/"+String(format_date_ad.getFullYear()),
+                        date_grad: String(format_date_grad.getDate())+"/"+String(format_date_grad.getMonth()+1)+"/"+String(format_date_grad.getFullYear()),
+                        file_pdf: proof_db.file_pdf,
+                        date_issue:String(format_date_issue.getDate())+"/"+String(format_date_issue.getMonth()+1)+"/"+String(format_date_issue.getFullYear()),
+                        status: [String(data_bc.status)],
+                    },
+                ]
+                setDetail(<Table columns={columns} dataSource={data}/>);
+                // );
             }
             else if(data_bc.HashPaper !== hash_pdf_db || data_bc.HashData !== hash_all_data){
                 setDetail("data not match");
@@ -86,13 +167,13 @@ export function ViewTran(){
 
     
     return(
-        <div className="site-layout-content" 
-            style={{ textAlign: 'center' ,background:colorBgContainer}} >
-          view transcript
+        <div  className="site-layout-content" style={{ textAlign: 'center',width: '90vh',
+                height:'50vh',
+                padding: '20px 30px 20px 20px',
+                background:'white',
+                borderRadius:'25px' }} >
           <Form
                     name="basic"
-                    labelCol={{ span: 8, }}
-                    wrapperCol={{ span: 16, }}
                     style={{ maxWidth: 600, }}
                     initialValues={{ remember: true, }}
                     autoComplete="off"
@@ -108,14 +189,13 @@ export function ViewTran(){
             </Form.Item>
 
                 <Form.Item
-                    wrapperCol={{ offset: 8, span: 16, }}
                 >
                     <Button type="primary" htmlType="submit" onClick={checkData}>
                         view transaction
                     </Button>
                 </Form.Item>
             {/* <Form.Item> */}
-                <p>{detailDB}</p>
+                <div className='center' >{detailDB}</div>
             {/* </Form.Item> */}
           </Form>
         </div>
