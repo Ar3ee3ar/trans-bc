@@ -44,7 +44,7 @@ const App = () => {
 
             </div>
             <div style={{
-              width: '20vh',
+              width: '30vh',
               float: 'right'
             }}>
                    <Routes>
