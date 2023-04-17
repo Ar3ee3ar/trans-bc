@@ -1,5 +1,5 @@
 import React, { Component, useState,useEffect }  from 'react';
-import { Layout, Button, theme, Form, Input, Menu ,Row,Col} from 'antd';
+import { Layout, Button, theme, Form, Input, Menu ,Row,Col,Tag,Table} from 'antd';
 import {useLocation,useNavigate,Link} from 'react-router-dom';
 import sjcl from 'sjcl';
 import {toBytes } from 'hex-my-bytes'
@@ -13,7 +13,8 @@ import {
     getCountCert,
     getCurrentWalletConnected,
     addTrans,
-    ViewData
+    ViewData,
+    ViewData_bc
 
 }from '../util/interact.js';
 
@@ -29,18 +30,6 @@ window.Buffer = window.Buffer || require("buffer").Buffer;
 //     const body = {"_id":username, "txhash":txhash, "file_pdf":pdf};
 //     return api.updateHistory(username,body)
 // }
-
-const connect_wall = () =>{
-    console.log('connect')
-}
-const sent_text = ()=>{
-    console.log('send text')
-}
-
-const hexToByte = (hex) => {
-  var hash_bytes = toBytes(hex);
-  return hash_bytes;
-}
 
 export const NavLogout = () =>{
     return(
@@ -58,6 +47,7 @@ export const RequestTran = () =>{
     const id_state = useLocation();
     const [walletAddress, setWallet] = useState("");
     const [status, setStatus] = useState("");
+    const [detailTran, setDetail] = useState("");
     // const [old_text, set_oldText] = useState("No connection to the network.");
     // const [new_text, set_newText] = useState ();
 
@@ -162,7 +152,19 @@ const onStoreData = async () => {
   const status = await addTrans(walletAddress,_id,all_data,file_pdf,file_base64);
   // console.log(status.status)
   setStatus(status.status);
+  console.log(status)
+  showHistory();
 }
+
+const onViewData = async() => {
+        const response = await ViewData_bc(_id);
+        return response
+    }
+
+const onGetProofDB = async(_id) =>{
+        const response = await api.getProofByID(_id);
+        return response.data.data
+    }
 
 async function UpdateData (){
     const body = {"_id":_id, "std_name":std_name, "std_last":std_last};
@@ -195,6 +197,108 @@ const change_page_gen = async e =>{
 const onChangeDisabled = () =>{
   setComponentDisabled(!componentDisabled);
 }
+
+const columns = [
+        {
+            title: 'Transaction hash',
+            dataIndex: 'txhash',
+            key: 'txhash',
+            render: (text) => <button 
+  onClick={() =>  navigator.clipboard.writeText(text)}
+>
+  TxID
+</button>
+        },
+        {
+            title: 'PDF',
+            dataIndex: 'file_pdf',
+            key: 'file_pdf',
+            render: (text) => <a download='transcript' href={text}>
+                         Download PDF
+                     </a>
+        },
+        {
+            title: 'Issue date',
+            dataIndex: 'date_issue',
+            key: 'date_issue',
+        },
+        {
+            title: 'Valid',
+            dataIndex: 'status',
+            key: 'status',
+            render: (_, { status }) => (
+            <>
+                {status.map((tag) => {
+                    let color = tag.length > 5 ? 'geekblue' : 'green';
+                    if (tag === 'false') {
+                        color = 'volcano';
+                    }
+                    else if (tag === 'true') {
+                        color = 'green';
+                    }
+                    return (
+                        <Tag color={color} key={tag}>
+                            {tag.toUpperCase()}
+                        </Tag>
+                    );
+                })}
+            </>
+            ),
+                },
+    ];
+
+    // const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    const showHistory = async() =>{
+      try{
+            // await delay(5000);
+            var data_bc =  await onViewData();
+            data_bc = JSON.parse(JSON.stringify(data_bc))
+            console.log(JSON.parse(JSON.stringify(data_bc)))
+            const proof_db =  await onGetProofDB(_id);
+            console.log(proof_db)
+            console.log(proof_db.txhash)
+
+
+            // const pdf_db = JSON.stringify(proof_db.file_pdf);
+            // const hash_pdf_db = window.web3.utils.sha3(pdf_db);
+
+            // const all_data = JSON.stringify(data_db)
+            // const hash_all_data = window.web3.utils.sha3(all_data);
+
+            // if(data_bc.HashPaper === hash_pdf_db & data_bc.HashData === hash_all_data){
+            //     // setDetail(<span>
+            //     //     ✅{" "}
+            //     //     found data
+            //     //     <br/>
+            //     //     <a download={`${data_bc.StdID}_transcript`} href={proof_db.file_pdf}>
+            //     //         Download PDF
+            //     //     </a>
+            //     //     <br />
+            //     //     {all_data}
+            //     //     </span>
+            var format_date_issue = new Date(data_bc[4] * 1000)
+
+            const data = [
+                {
+                    key: '1',
+                    txhash: proof_db.txhash,
+                    file_pdf: proof_db.file_pdf,
+                    date_issue:String(format_date_issue.getDate())+"/"+String(format_date_issue.getMonth()+1)+"/"+String(format_date_issue.getFullYear()),
+                    status: [String(data_bc[3])],
+                },
+            ]
+            setDetail(<Table columns={columns} dataSource={data}/>);
+            //     // );
+            // }
+            // else if(data_bc.HashPaper !== hash_pdf_db || data_bc.HashData !== hash_all_data){
+            //     setDetail("data not match");
+            // }
+        }catch(error){
+          console.log(error)
+            // setDetail("not found transaction");
+        }
+    }
 
 
 
@@ -325,6 +429,10 @@ const onChangeDisabled = () =>{
             </Col>
           </Row>
           </div>
+          <br/>
+          <div >
+                  {detailTran}
+                </div>
         </div>
         )
 }
