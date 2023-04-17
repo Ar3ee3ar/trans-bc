@@ -160,6 +160,7 @@ export const addTrans = async (address,std_id,hashData,hashPaper,file_base64) =>
           <br />
         </span>
       ),
+      txhash:(txHash)
     };
   } catch (error) {
     return {
