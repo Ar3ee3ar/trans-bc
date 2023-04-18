@@ -32,12 +32,15 @@ window.Buffer = window.Buffer || require("buffer").Buffer;
 // }
 
 export const NavLogout = () =>{
+    const id_state = useLocation();
+    // console.log(id_state)
+    const navigate = useNavigate();
     return(
       <Menu
         theme="dark"
         mode="horizontal"
         style={{color: 'white'}}>
-        <Menu.Item><Link to="/view">view Transaction</Link></Menu.Item>
+        <Menu.Item onClick={() => navigate('/history',{state: {id:id_state.state.id}})}>history</Menu.Item>
         <Menu.Item><Link to="/">Logout</Link></Menu.Item>
       </Menu>
     )
@@ -152,8 +155,10 @@ const onStoreData = async () => {
   const status = await addTrans(walletAddress,_id,all_data,file_pdf,file_base64);
   // console.log(status.status)
   setStatus(status.status);
-  console.log(status)
-  showHistory();
+  console.log(status);
+  navigate('/history',{state: {id:id_state.state.id}});
+  // showHistory();
+  
 }
 
 const onViewData = async() => {
@@ -305,7 +310,7 @@ const columns = [
 
 
     return(
-            <div className="site-layout-content" style={{ textAlign: 'center',width: '100vh',
+            <div className="site-layout-content" style={{ textAlign: 'center',width: '120vh',
                 height:'63vh',
                 padding: '20px 30px 20px 20px',
                 background:'white',
@@ -429,10 +434,13 @@ const columns = [
             </Col>
           </Row>
           </div>
-          <br/>
-          <div >
+          {/* <br/>
+          <div style={{marginTop:'50px', textAlign: 'center',
+                padding: '20px 30px 20px 20px',
+                background:'white',
+                borderRadius:'25px'}}>
                   {detailTran}
-                </div>
+                </div> */}
         </div>
         )
 }

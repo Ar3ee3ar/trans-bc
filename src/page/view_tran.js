@@ -1,6 +1,6 @@
 import React, { Component,useState }  from 'react';
 import { Layout, Button, theme, Form, Input,Menu,Table,Tag } from 'antd';
-import {useNavigate,Link} from 'react-router-dom';
+import {useNavigate,Link,useLocation} from 'react-router-dom';
 
 import api from '../api';
 import {
@@ -27,6 +27,7 @@ export function ViewTran(){
     const [detailDBTable, setDetailDBTable] = useState("");
     const [detailProofTable, setDetailProofTable] = useState("");
     const{ token: { colorBgContainer },} = theme.useToken();
+
 
     const OnViewTransaction = async() =>{
         const response = await ViewData_Transaction(txhash);
