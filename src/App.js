@@ -8,6 +8,7 @@ import api from './api';
 import {Login,NavView} from './page/login';
 import {RequestTran,NavLogout} from './page/request_tran';
 import {ViewTran,NavLogin} from './page/view_tran';
+import {HistoryTran,NavHistory} from './page/history';
 // import NavLogin from './page/navbar_login';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -51,6 +52,7 @@ const App = () => {
                      <Route exact path='/' element={<NavView/>}/>
                      <Route exact path='/request' element = {<NavLogout/>}/>
                      <Route exact path='/view' element={<NavLogin/>}/>
+                     <Route exact path='/history' element={<NavHistory/>}/>
                    </Routes>
             </div>
           </Header>
@@ -60,12 +62,16 @@ const App = () => {
               <Route exact path='/' element={<Login/>}/>
               <Route exact path='/request' element = {<RequestTran/>}/>
               <Route exact path='/view' element={<ViewTran/>}/>
+              <Route exact path='/history' element={<HistoryTran/>}/>
             </Routes>
           </Content>
           
           <Footer style={{ 
                   textAlign: 'center',
-                  display:'flex',
+                  position: 'fixed',
+                  left:0,
+                  bottom:0,
+                  right:0,
                   alignItems: 'flex-end',
                   justifyContent: 'center' }}>MCS KMUTNB</Footer>
           
